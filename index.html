@@ -321,7 +321,7 @@ let roomPeer=null,roomCode='',roomConnections=[],lastBroadcastAt=0;
 const worldOrientation=new THREE.Quaternion();
 function broadcastState(){
  if(!roomPeer||!roomPeer.open)return;
- vrCamera.object3D.getWorldQuaternion(worldOrientation);
+ try{vrCamera.object3D.updateMatrixWorld(true);vrCamera.object3D.getWorldQuaternion(worldOrientation);}catch(err){console.warn('Orientación no disponible',err);worldOrientation.identity();}
  const state={
    type:'state',index:current,map:mapMode,
    q:[worldOrientation.x,worldOrientation.y,worldOrientation.z,worldOrientation.w]
@@ -364,6 +364,7 @@ function startSharing(){
      updateShareUi('Asesor conectado · Sala '+roomCode);
      broadcastState();
    });
+   conn.on('data',message=>{if(message&&message.type==='hello')broadcastState();});
    conn.on('close',()=>{roomConnections=roomConnections.filter(c=>c!==conn);updateShareUi('Sala '+roomCode+' · esperando asesor');});
    conn.on('error',()=>updateShareUi('Falló la conexión del asesor; intenta reconectar.'));
  });
