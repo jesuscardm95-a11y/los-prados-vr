@@ -1,10 +1,10 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:20px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px}#aerialToggle{position:fixed;z-index:12;right:12px;top:56px;background:#2b9c7b;font-size:12px;box-shadow:0 3px 16px #071c1855}#aerialInfo{font-size:11px;color:#e2f3e6;padding-top:7px} @media(max-width:650px){#panel{width:260px}#map{height:auto;aspect-ratio:882/879}}</style></head><body>
-<button id="toggle">Ocultar/mostrar mapa</button><button id="aerialToggle" type="button">Vista aérea VR</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="aerialInfo">Nuevo: Vista aérea VR. Puedes ampliar el plano y señalar un lugar con el controlador.</p><p id="help">PC: selecciona una flecha turquesa para elegir destino. Quest 3: activa «Enter VR», apunta a la flecha del destino y aprieta el gatillo. Usa el mapa para saltar a cualquier punto. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:20px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px}#aerialToggle{position:fixed;z-index:12;right:12px;top:56px;background:#173e33d9;border:1px solid #438978;border-radius:999px;color:#e6fff7;font-size:11px;padding:8px 11px;box-shadow:0 3px 14px #071c1844}#aerialInfo{font-size:11px;color:#e2f3e6;padding-top:7px} @media(max-width:650px){#panel{width:260px}#map{height:auto;aspect-ratio:882/879}}</style></head><body>
+<button id="toggle">Ocultar/mostrar mapa</button><button id="aerialToggle" type="button">Ver plano</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="aerialInfo">Marcador amarillo: ubicación actual del render. Ubicaciones aproximadas.</p><p id="help">PC: selecciona una flecha turquesa para elegir destino. Quest 3: activa «Enter VR», apunta a la flecha del destino y aprieta el gatillo. Usa el mapa para saltar a cualquier punto. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div>
 <a-scene embedded vr-mode-ui="enabled:true" renderer="colorManagement:true;antialias:true" background="color:#162f2b" cursor="rayOrigin:mouse" raycaster="objects:.clickable" loading-screen="enabled:false"><a-entity id="rig" position="0 0 0"><a-camera look-controls="reverseMouseDrag:false"></a-camera><a-entity laser-controls="hand:right" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity><a-entity laser-controls="hand:left" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity></a-entity><a-sky id="sky" color="#24483b" rotation="0 -90 0"></a-sky><a-entity id="pathChoices" visible="false"></a-entity>
-<a-entity id="aerialEntry" position="-1.65 0.79 -2.8" rotation="0 25 0">
-  <a-plane id="aerialEntryHit" class="clickable" width="0.96" height="0.28"
-   material="shader:flat;color:#195541;opacity:0.73;side:double"
-   text="value:VER PLANO VR;align:center;width:2.7;color:#ffffff"></a-plane>
+<a-entity id="aerialEntry" position="-2.75 0.18 -1.35" rotation="0 63 0">
+  <a-plane id="aerialEntryHit" class="clickable" width="0.80" height="0.22"
+   material="shader:flat;color:#113d35;opacity:0.59;transparent:true;side:double"
+   text="value:VER PLANO;align:center;width:2.1;color:#e8fff9"></a-plane>
 </a-entity>
 <a-entity id="aerialExperience" visible="false">
   <a-entity id="aerialBoard" position="0 -0.64 -3.3" rotation="-49 0 0">
@@ -14,12 +14,16 @@
     <a-plane id="aerialSelect" position="0 0 0.028" width="3.5" height="3.49"
       material="shader:flat;color:#ffffff;transparent:true;opacity:0.002;depthWrite:false;side:double"></a-plane>
     <a-entity id="aerialPin" visible="false" position="0 0 0.065">
-      <a-ring radius-inner="0.085" radius-outer="0.117"
-        material="shader:flat;color:#f9c45d;side:double;opacity:0.98"></a-ring>
-      <a-circle radius="0.024" position="0 0 0.008" material="shader:flat;color:#ffffff;side:double"></a-circle>
+      <a-circle radius="0.143" position="0 0 -0.005" material="shader:flat;color:#152b23;opacity:0.6;transparent:true;side:double"></a-circle>
+      <a-ring radius-inner="0.089" radius-outer="0.124" material="shader:flat;color:#ffd254;side:double"></a-ring>
+      <a-circle radius="0.069" position="0 0 0.008" material="shader:flat;color:#fff1b1;side:double"></a-circle>
+      <a-entity id="aerialCurrentNumber" position="0 0 0.020" text="value:01;align:center;baseline:center;width:0.65;color:#14312f"></a-entity>
+    </a-entity>
+    <a-entity id="aerialSelectedPin" visible="false" position="0 0 0.075">
+      <a-ring radius-inner="0.07" radius-outer="0.096" material="shader:flat;color:#5be6df;side:double"></a-ring>
     </a-entity>
   </a-entity>
-  <a-entity id="aerialControls" position="0 1.01 -2.6">
+  <a-entity id="aerialControls" position="0 1.01 -2.6"><a-entity id="aerialLocationLabel" position="0 -0.37 0"></a-entity>
     <a-plane id="aerialReturn" position="-0.85 0 0" width="1.25" height="0.34"
       material="shader:flat;color:#245b48;opacity:0.93;side:double"
       text="value:VOLVER AL TOUR;align:center;width:2.85;color:#ffffff"></a-plane>
@@ -204,7 +208,8 @@ function renderChoices(i){
 }
 function show(i){
  if(mapMode)exitAerial(false);
- current=i;const n=nodes[i];
+ current=i;
+ updateAerialEntryVisibility();const n=nodes[i];
  pathChoices.setAttribute('visible',false);
  document.querySelectorAll('.pin,.station').forEach(b=>b.classList.toggle('active',+b.dataset.i===i));
  const localFile=urls[i];
@@ -220,6 +225,9 @@ document.getElementById('files').onchange=e=>{urls={};let fs=[...e.target.files]
 const overview=document.getElementById('aerialExperience');
 const board=document.getElementById('aerialBoard');
 const pin=document.getElementById('aerialPin');
+const selectedPin=document.getElementById('aerialSelectedPin');
+const currentNumber=document.getElementById('aerialCurrentNumber');
+const aerialLocationLabel=document.getElementById('aerialLocationLabel');
 const entry=document.getElementById('aerialEntry');
 const toggleAerial=document.getElementById('aerialToggle');
 const aerialHits=['aerialSelect','aerialReturn','aerialMinus','aerialPlus'].map(id=>document.getElementById(id));
@@ -227,6 +235,25 @@ function switchAerialHitState(enabled){
  for(const element of aerialHits)element.classList.toggle('clickable',enabled);
  document.getElementById('aerialEntryHit').classList.toggle('clickable',!enabled);
 }
+
+function placeCurrentNodeOnAerial(){
+ const node=nodes[current];if(!node)return;
+ // El plano está escalado a 3.5 por 3.49, y las coordenadas se guardan en % desde arriba.
+ const x=((node.x/100)-0.5)*3.5,y=(0.5-node.y/100)*3.49;
+ pin.setAttribute('position',x.toFixed(4)+' '+y.toFixed(4)+' 0.065');
+ pin.setAttribute('visible',true);
+ currentNumber.setAttribute('text','value:'+String(current+1).padStart(2,'0')+';align:center;baseline:center;width:0.65;color:#14312f');
+ const previous=aerialLocationLabel.getObject3D('mesh');
+ if(previous)previous.geometry.dispose();
+ aerialLocationLabel.setObject3D('mesh',new THREE.Mesh(new THREE.PlaneGeometry(2.1,0.36),getLabelMaterial(current)));
+ document.getElementById('aerialInfo').textContent='Estás en '+node.name+' (amarillo). Ubicación aproximada. Toca el plano para marcar un lote (turquesa).';
+}
+function updateAerialEntryVisibility(){
+ const visible=!mapMode;
+ entry.setAttribute('visible',visible);
+ document.getElementById('aerialEntryHit').classList.toggle('clickable',visible);
+}
+
 function enterAerial(){
  if(mapMode)return;
  mapMode=true;
@@ -236,20 +263,22 @@ function enterAerial(){
  pathChoices.innerHTML='';
  document.getElementById('intro').setAttribute('visible',false);
  entry.setAttribute('visible',false);
- toggleAerial.textContent='Volver al recorrido 360°';
+ toggleAerial.textContent='Volver al recorrido';
  switchAerialHitState(true);
- setMessage('Vista aérea: apunta y selecciona un lugar del plano.');
- document.getElementById('aerialInfo').textContent='En vista aérea: señala un lugar del plano. Usa + o - para ampliar. El marcador es provisional, no identifica automáticamente manzana o lote.';
+ selectedPin.setAttribute('visible',false);
+ placeCurrentNodeOnAerial();
+ setMessage('Plano abierto desde '+nodes[current].name);
 }
 function exitAerial(restore=true){
  if(!mapMode)return;
  mapMode=false;
  overview.setAttribute('visible',false);
  sky.setAttribute('visible',true);
- entry.setAttribute('visible',true);
- toggleAerial.textContent='Vista aérea VR';
+ toggleAerial.textContent='Ver plano';
+ selectedPin.setAttribute('visible',false);
+ updateAerialEntryVisibility();
  switchAerialHitState(false);
- document.getElementById('aerialInfo').textContent='Nuevo: Vista aérea VR. Puedes ampliar el plano y señalar un lugar con el controlador.';
+ document.getElementById('aerialInfo').textContent='Marcador amarillo: ubicación actual del render. Ubicaciones aproximadas.';
  if(restore){
    if(activeTexture){renderChoices(current);setMessage('Imagen visible: panorámica '+(current+1));}
    else show(current);
@@ -269,12 +298,13 @@ document.getElementById('aerialSelect').addEventListener('click',event=>{
  if(!uv)return;
  const x=(uv.x-0.5)*3.5;
  const y=(uv.y-0.5)*3.49;
- pin.setAttribute('position',x.toFixed(4)+' '+y.toFixed(4)+' 0.075');
- pin.setAttribute('visible',true);
- document.getElementById('aerialInfo').textContent='Punto señalado sobre el plano. Para identificar la manzana y el lote exactos necesitaremos el plano limpio.';
+ selectedPin.setAttribute('position',x.toFixed(4)+' '+y.toFixed(4)+' 0.075');
+ selectedPin.setAttribute('visible',true);
+ document.getElementById('aerialInfo').textContent='Estás en '+nodes[current].name+' (amarillo). Lote señalado (turquesa). Puntos aproximados.';
 });
 toggleAerial.onclick=()=>mapMode?exitAerial():enterAerial();
 switchAerialHitState(false);
+updateAerialEntryVisibility();
 
 document.getElementById('toggle').onclick=()=>document.getElementById('panel').classList.toggle('hidden');document.querySelector('a-scene').addEventListener('loaded',()=>show(0));
 </script></body></html>
