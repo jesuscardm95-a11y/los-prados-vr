@@ -326,8 +326,12 @@ function broadcastState(){
    type:'state',index:current,map:mapMode,
    q:[worldOrientation.x,worldOrientation.y,worldOrientation.z,worldOrientation.w]
  };
- roomConnections=roomConnections.filter(conn=>conn.open);
- for(const conn of roomConnections){try{conn.send(state);}catch(e){console.warn('Problema al sincronizar',e)}}
+ // No descartar conexiones mientras negocian WebRTC: aún pueden estar en estado !open.
+ // Antes se eliminaban de la lista cada 250 ms y nunca recibían los estados.
+ for(const conn of roomConnections){
+   if(!conn.open)continue;
+   try{conn.send(state);}catch(e){console.warn('Problema al sincronizar',e)}
+ }
 }
 function createRoomCode(){
  const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -359,6 +363,7 @@ function startSharing(){
    updateShareUi('Código del asesor: '+roomCode+'. Abre espectador.html en tu PC.');
  });
  roomPeer.on('connection',conn=>{
+   // Se conserva la referencia incluso antes de que el canal termine de abrir.
    roomConnections.push(conn);
    conn.on('open',()=>{
      updateShareUi('Asesor conectado · Sala '+roomCode);
