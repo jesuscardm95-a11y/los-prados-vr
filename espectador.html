@@ -26,29 +26,60 @@ const locations=[{x:72.5,y:46.3},{x:43.4,y:39.3},{x:50.3,y:39.9},{x:64.5,y:25},{
 const names=['01 · Pórtico principal','02 · Parque principal, vista 1','03 · Parque principal, vista 2','04 · Avenida de acceso','05 · Parque del Recuerdo','06 · Avenida interior','07 · Parque para niños','08 · Avenida 03','09 · Avenida 05','10 · Cancha multiusos'];
 const keys=['01. TOUR PÓRTICO','03. TOUR 02 PARQUE1','02. TOUR 01 PARQUE 1','04. TOUR AVENIDA','05. TOUR PARQUE 2','06. TOUR AVENIDA','07. TOUR PARQUE PARA NIÑOS','08. TOUR AVENIDA 03','09. TOUR AVENIDA 05','10. TOUR CANCHA MULTIUSOS'];
 const info=document.getElementById('info'),label=document.getElementById('name'),sky=document.getElementById('sky'),camera=document.getElementById('camera'),waiting=document.getElementById('waiting');
-let peer=null,connection=null,sceneIndex=-1,mode=null,lastQuat=null,imageToken=0,loadedTexture=null,offlineTimer=null,receivedState=false;
+let peer=null,connection=null,sceneIndex=-1,loadingIndex=-1,imageToken=0,loadedTexture=null,receivedState=false,packetsReceived=0,sceneReady=false;
 function status(s){info.textContent=s}
+// Impedir descargas repetidas mientras llegan actualizaciones de orientación (4 por segundo).
 function updateImage(index){
- if(index===sceneIndex&&loadedTexture)return;
- sceneIndex=index;
+ if(index===sceneIndex&&(loadingIndex===index||loadedTexture&&loadingIndex===-1))return;
+ sceneIndex=index;loadingIndex=index;
+ const token=++imageToken;
  const image=new Image();
- const token=++imageToken;let attempt=0;
+ let attempt=0;
+ status('Recibiendo punto '+String(index+1).padStart(2,'0')+'. Descargando panorámica...');
  function next(){
   if(token!==imageToken)return;
-  if(attempt>=4){status('No se pudo cargar la panorámica '+(index+1));return;}
+  if(attempt>=4){
+    loadingIndex=-1;sceneIndex=-1;
+    status('No se pudo descargar la panorámica '+(index+1)+'. Comprueba Internet y recarga.');
+    return;
+  }
   image.src=encodeURIComponent(keys[index]+'.'+['jpg','jpeg','png','webp'][attempt++]);
  }
  image.onload=()=>{
   if(token!==imageToken)return;
   const mesh=sky.getObject3D('mesh');
-  if(!mesh){status('Preparando escena 3D...');setTimeout(()=>{if(token===imageToken){sceneIndex=-1;updateImage(index)}},500);return;}
-  const t=new THREE.Texture(image);t.colorSpace=THREE.SRGBColorSpace;t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;t.generateMipmaps=false;t.needsUpdate=true;
-  const m=new THREE.MeshBasicMaterial({map:t,side:THREE.BackSide});
-  if(loadedTexture){loadedTexture.t.dispose();loadedTexture.m.dispose();}
-  mesh.material=m;loadedTexture={t,m};waiting.setAttribute('visible',false);
-  label.textContent=names[index];
+  if(!mesh){
+    status('Preparando el visor del asesor...');
+    // No reiniciar la descarga mientras todavía se crea la escena.
+    const scene=document.querySelector('a-scene');
+    scene.addEventListener('loaded',()=>{
+      if(token!==imageToken)return;
+      loadingIndex=-1;sceneIndex=-1;updateImage(index);
+    },{once:true});
+    return;
+  }
+  try{
+    const t=new THREE.Texture(image);
+    t.colorSpace=THREE.SRGBColorSpace;
+    t.minFilter=THREE.LinearFilter;
+    t.magFilter=THREE.LinearFilter;
+    t.generateMipmaps=false;
+    t.needsUpdate=true;
+    const m=new THREE.MeshBasicMaterial({map:t,side:THREE.BackSide,color:0xffffff});
+    if(loadedTexture){loadedTexture.t.dispose();loadedTexture.m.dispose();}
+    mesh.material=m;loadedTexture={t,m};
+    loadingIndex=-1;
+    waiting.setAttribute('visible',false);
+    label.textContent=names[index];
+    status('Transmitiendo · '+names[index]);
+  }catch(error){
+    loadingIndex=-1;sceneIndex=-1;
+    status('Error al mostrar el panorama: '+error.message);
+    console.error(error);
+  }
  };
- image.onerror=next;next();
+ image.onerror=next;
+ next();
 }
 function reset(){
  if(connection){try{connection.close()}catch(e){}}
@@ -58,24 +89,24 @@ function reset(){
 function join(){
  const code=document.getElementById('room').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
  if(!/^[A-Z0-9]{6}$/.test(code)){status('Ingresa el código de 6 caracteres mostrado en los lentes.');return;}
- reset();receivedState=false;sceneIndex=-1;status('Conectando...');label.textContent='';
+ reset();receivedState=false;packetsReceived=0;sceneIndex=-1;loadingIndex=-1;status('Conectando...');label.textContent='';waiting.setAttribute('visible',true);
  if(typeof Peer==='undefined'){status('No cargó la biblioteca de conexión. Comprueba Internet.');return;}
  peer=new Peer();
  peer.on('open',()=>{
   connection=peer.connect('efcom-prados-'+code.toLowerCase(),{reliable:true,serialization:'json'});
-  connection.on('open',()=>{status('Conectado, esperando datos del visor...');connection.send({type:'hello'});setTimeout(()=>{if(connection&&connection.open&&!receivedState)status('Conexión abierta, pero sin datos del visor. Actualiza la página en Quest y vuelve a pulsar COMPARTIR para generar una nueva sala.');},6000);});
+  connection.on('open',()=>{status('Conectado, esperando el primer panorama...');connection.send({type:'hello'});setTimeout(()=>{if(connection&&connection.open&&!receivedState)status('Conexión establecida, pero los Quest aún no envían datos. Comprueba que la sala siga activa.');},9000);});
   connection.on('data',msg=>{
     if(!msg||msg.type!=='state')return;
     if(!Number.isInteger(msg.index)||msg.index<0||msg.index>=keys.length)return;
-    receivedState=true;
+    receivedState=true;packetsReceived++;
     document.getElementById('mapOverlay').style.display=msg.map?'flex':'none';
-    if(msg.map){const point=document.getElementById('mapPoint');point.textContent=String(msg.index+1).padStart(2,'0');point.style.left=locations[msg.index].x+'%';point.style.top=locations[msg.index].y+'%';label.textContent='Cliente viendo el plano · '+names[msg.index];}
+    if(msg.map){const point=document.getElementById('mapPoint');point.textContent=String(msg.index+1).padStart(2,'0');point.style.left=locations[msg.index].x+'%';point.style.top=locations[msg.index].y+'%';label.textContent='Cliente viendo el plano · '+names[msg.index];status('Vista aérea sincronizada · '+names[msg.index]);}
     else updateImage(msg.index);
     if(msg.q&&msg.q.length===4&&msg.q.every(Number.isFinite)){
       camera.object3D.quaternion.set(...msg.q);
     }
-    if(msg.map)status('El cliente está en vista aérea ('+names[msg.index]+').');
-    else status('Sincronizado en tiempo real.');
+    // No sobrescribir 'Descargando panorámica...' con cada paquete recibido.
+    if(packetsReceived%40===0){console.debug('Paquetes del visor recibidos:',packetsReceived)}
   });
   connection.on('close',()=>status('Conexión cerrada. Puedes reconectar.'));
   connection.on('error',()=>status('Error de conexión. Prueba de nuevo.'));
