@@ -89,27 +89,32 @@ function getArrowTexture(){
 function getLabelMaterial(dest){
  if(arrowAssets.labels.has(dest))return arrowAssets.labels.get(dest);
  const canvas=document.createElement('canvas');
- canvas.width=1024;canvas.height=192;
+ canvas.width=1200;canvas.height=220;
  const ctx=canvas.getContext('2d');
- const name=nodes[dest].name.split(' · ').slice(1).join(' · ');
- // Fondo translúcido tipo cristal, muy ligero.
- ctx.fillStyle='rgba(8,37,37,0.27)';
- const x=12,y=16,w=1000,h=160,r=78;
+ // Mantener número correlativo y tildes, incluso en los visores VR.
+ const name=nodes[dest].name;
+ ctx.fillStyle='rgba(15,35,37,0.56)';
+ const x=18,y=20,w=1164,h=180,r=85;
  ctx.beginPath();
- ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
- ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+ ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
+ ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);
+ ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
- ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();ctx.fill();
+ ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+ ctx.closePath();ctx.fill();
  ctx.textAlign='center';ctx.textBaseline='middle';
- let size=62;
- do{ctx.font='500 '+size+'px Arial, sans-serif';size-=2;}
- while(ctx.measureText(name).width>905 && size>=34);
- ctx.shadowColor='rgba(0,0,0,0.45)';ctx.shadowBlur=9;
- ctx.fillStyle='#f6fffe';ctx.fillText(name,512,99);
+ let size=61;
+ ctx.font='600 '+size+'px Arial, sans-serif';
+ while(ctx.measureText(name).width>1050&&size>33){
+   size-=2;ctx.font='600 '+size+'px Arial, sans-serif';
+ }
+ ctx.shadowColor='rgba(0,0,0,0.65)';ctx.shadowBlur=10;
+ ctx.fillStyle='#ffffff';ctx.fillText(name,600,112);
  const texture=new THREE.CanvasTexture(canvas);
  texture.colorSpace=THREE.SRGBColorSpace;
  const material=new THREE.MeshBasicMaterial({
-   map:texture,transparent:true,side:THREE.DoubleSide,depthWrite:false,toneMapped:false
+   map:texture,transparent:true,side:THREE.DoubleSide,
+   depthWrite:false,toneMapped:false
  });
  arrowAssets.labels.set(dest,material);
  return material;
@@ -119,35 +124,33 @@ function renderChoices(i){
  const destinations=[...new Set(nodes[i].next||[])]
    .filter(dest=>Number.isInteger(dest)&&dest>=0&&dest<nodes.length&&dest!==i);
  if(!destinations.length){pathChoices.setAttribute('visible',false);return;}
- // Cada destino queda en una dirección distinta: hay que girar la cabeza en VR.
+ // Flechas más distantes, distribuidas en el campo panorámico.
  const angles=destinations.length===1?[0]:
-   destinations.length===2?[-43,43]:
-   destinations.length===3?[-57,0,57]:
-   destinations.map((_,k)=>-65+(130*k)/(destinations.length-1));
- const radius=3.5;
+   destinations.length===2?[-42,42]:
+   destinations.length===3?[-58,0,58]:
+   destinations.map((_,k)=>-70+(140*k)/(destinations.length-1));
+ const radius=4.6;
  destinations.forEach((dest,k)=>{
    const radians=angles[k]*Math.PI/180;
    const group=document.createElement('a-entity');
    group.setAttribute('position',
-     (Math.sin(radians)*radius).toFixed(3)+' -0.46 '+(-Math.cos(radians)*radius).toFixed(3));
-   group.setAttribute('rotation','-8 '+(-angles[k])+' 0');
-   // Área de clic amplia pero totalmente invisible: ratón y raycast del Quest.
+     (Math.sin(radians)*radius).toFixed(3)+' -0.58 '+(-Math.cos(radians)*radius).toFixed(3));
+   group.setAttribute('rotation','-10 '+(-angles[k])+' 0');
+   // Superficie invisible más cómoda para seleccionar con los controladores Quest.
    const hit=document.createElement('a-plane');
    hit.classList.add('clickable');
-   hit.setAttribute('width','1.3');hit.setAttribute('height','0.8');
-   hit.setAttribute('position','0 -0.05 0.025');
+   hit.setAttribute('width','1.55');hit.setAttribute('height','0.95');
+   hit.setAttribute('position','0 -0.08 0.03');
    hit.setAttribute('material','shader:flat;transparent:true;opacity:0.002;depthWrite:false;side:double');
    hit.addEventListener('click',()=>show(dest));
    group.appendChild(hit);
-   // Chevron minimalista, luminosidad y movimiento muy suaves.
    const arrow=document.createElement('a-entity');
-   arrow.setAttribute('position','0 0.10 0.06');
-   arrow.setAttribute('geometry','primitive:plane;width:0.39;height:0.24');
-   arrow.setAttribute('material','shader:flat;transparent:true;opacity:0.86;depthWrite:false;side:double');
-   arrow.getAttribute('material');
-   arrow.setAttribute('animation','property:position;from:0 0.08 0.06;to:0 0.12 0.06;dir:alternate;dur:1700;loop:true;easing:easeInOutSine');
+   arrow.setAttribute('position','0 0.13 0.07');
+   arrow.setAttribute('geometry','primitive:plane;width:0.46;height:0.28');
+   arrow.setAttribute('material','shader:flat;transparent:true;opacity:0.92;depthWrite:false;side:double');
+   arrow.setAttribute('animation',
+     'property:position;from:0 0.11 0.07;to:0 0.16 0.07;dir:alternate;dur:1500;loop:true;easing:easeInOutSine');
    group.appendChild(arrow);
-   // Textura de la flecha (Canvas conserva transparencia, sin cuadros verdes).
    arrow.addEventListener('loaded',()=>{
      const mesh=arrow.getObject3D('mesh');
      if(mesh)mesh.material=new THREE.MeshBasicMaterial({
@@ -156,14 +159,14 @@ function renderChoices(i){
      });
    },{once:true});
    const caption=document.createElement('a-entity');
-   caption.setAttribute('position','0 -0.24 0.048');
+   caption.setAttribute('position','0 -0.30 0.06');
    caption.addEventListener('loaded',()=>{
      caption.setObject3D('mesh',new THREE.Mesh(
-       new THREE.PlaneGeometry(1.40,0.263),getLabelMaterial(dest)
+       new THREE.PlaneGeometry(1.75,0.32),getLabelMaterial(dest)
      ));
    },{once:true});
    group.appendChild(caption);
-   hit.addEventListener('mouseenter',()=>arrow.setAttribute('scale','1.15 1.15 1'));
+   hit.addEventListener('mouseenter',()=>arrow.setAttribute('scale','1.12 1.12 1'));
    hit.addEventListener('mouseleave',()=>arrow.setAttribute('scale','1 1 1'));
    pathChoices.appendChild(group);
  });
