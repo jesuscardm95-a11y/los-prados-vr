@@ -364,7 +364,12 @@ function startSharing(){
      updateShareUi('Asesor conectado · Sala '+roomCode);
      broadcastState();
    });
-   conn.on('data',message=>{if(message&&message.type==='hello')broadcastState();});
+   conn.on('data',message=>{
+     if(message&&message.type==='hello'){
+       try{conn.send({type:'welcome',index:current,map:mapMode});}catch(err){console.warn('Falló saludo de conexión',err)}
+       broadcastState();
+     }
+   });
    conn.on('close',()=>{roomConnections=roomConnections.filter(c=>c!==conn);updateShareUi('Sala '+roomCode+' · esperando asesor');});
    conn.on('error',()=>updateShareUi('Falló la conexión del asesor; intenta reconectar.'));
  });
