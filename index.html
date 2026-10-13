@@ -1,6 +1,12 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:80px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px} #tour-nav{position:fixed;z-index:12;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid #3b9273;border-radius:12px;background:#0b3028ee;box-shadow:0 4px 20px #0008;white-space:nowrap}#tour-nav button{margin:0;padding:10px 12px;font-weight:bold}#tour-nav button:disabled{opacity:0.4;cursor:not-allowed}#tour-counter{font-size:12px;color:#c5ded4;min-width:46px;text-align:center} @media(max-width:650px){#panel{width:260px}#map{height:auto;aspect-ratio:882/879}}</style></head><body>
-<button id="toggle">Ocultar/mostrar mapa</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="help">PC: arrastra para mirar y pulsa flechas. Quest 3: abre desde HTTPS y pulsa «Enter VR»; apunta al botón AVANZAR y aprieta el gatillo. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div><div id="tour-nav" aria-label="Controles del recorrido"><button id="prevTour" type="button">← Anterior</button><span id="tour-counter">1 / 10</span><button id="nextTour" type="button">Siguiente →</button></div>
-<a-scene embedded vr-mode-ui="enabled:true" renderer="colorManagement:true;antialias:true" background="color:#162f2b" cursor="rayOrigin:mouse" raycaster="objects:.clickable" loading-screen="enabled:false"><a-entity id="rig" position="0 0 0"><a-camera look-controls="reverseMouseDrag:false"><a-entity id="vrAdvance" class="clickable" position="0 -0.47 -1.6" geometry="primitive:plane;width:0.98;height:0.26" material="shader:flat;color:#16684e;opacity:0.91;side:double" text="value:AVANZAR >;align:center;width:1.8;wrapCount:18;color:#ffffff"></a-entity></a-camera><a-entity laser-controls="hand:right" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity><a-entity laser-controls="hand:left" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity></a-entity><a-sky id="sky" color="#24483b" rotation="0 -90 0"></a-sky><a-entity id="hotspots"></a-entity><a-entity position="0 0 -4" id="intro" text="value:Cargando panorama;align:center;width:4;color:#ffffff"></a-entity></a-scene>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:20px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px} @media(max-width:650px){#panel{width:260px}#map{height:auto;aspect-ratio:882/879}}</style></head><body>
+<button id="toggle">Ocultar/mostrar mapa</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="help">PC: arrastra para mirar y pulsa la pequeña flecha turquesa del camino. Quest 3: entra en VR, apunta a la flecha con el controlador y presiona el gatillo. Usa el mapa para saltar a cualquier vista. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div>
+<a-scene embedded vr-mode-ui="enabled:true" renderer="colorManagement:true;antialias:true" background="color:#162f2b" cursor="rayOrigin:mouse" raycaster="objects:.clickable" loading-screen="enabled:false"><a-entity id="rig" position="0 0 0"><a-camera look-controls="reverseMouseDrag:false"></a-camera><a-entity laser-controls="hand:right" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity><a-entity laser-controls="hand:left" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity></a-entity><a-sky id="sky" color="#24483b" rotation="0 -90 0"></a-sky><a-entity id="pathArrow" position="0 -1.12 -3.25" rotation="-90 0 0" visible="false">
+  <a-plane id="arrowHit" class="clickable" width="0.80" height="0.72" material="shader:flat;color:#32d9cd;opacity:0.002;transparent:true;depthWrite:false;side:double"></a-plane>
+  <a-entity id="arrowGraphic" position="0 0 0.012" animation="property:scale;from:0.96 0.96 0.96;to:1.04 1.04 1.04;dir:alternate;dur:1700;loop:true;easing:easeInOutSine">
+    <a-plane position="-0.088 0.032 0.005" rotation="0 0 45" width="0.255" height="0.034" material="shader:flat;color:#54e0d8;opacity:0.78;transparent:true;depthWrite:false;side:double"></a-plane>
+    <a-plane position="0.088 0.032 0.005" rotation="0 0 -45" width="0.255" height="0.034" material="shader:flat;color:#54e0d8;opacity:0.78;transparent:true;depthWrite:false;side:double"></a-plane>
+  </a-entity>
+</a-entity><a-entity position="0 0 -4" id="intro" text="value:Cargando panorama;align:center;width:4;color:#ffffff"></a-entity></a-scene>
 <script>
 const nodes=[
  {name:'01 · Pórtico principal',key:'01. TOUR PÓRTICO',x:72.5,y:46.3,next:[1]},
@@ -14,12 +20,13 @@ const nodes=[
  {name:'09 · Avenida 05',key:'09. TOUR AVENIDA 05',x:48,y:70,next:[4,9]},
  {name:'10 · Cancha multiusos',key:'10. TOUR CANCHA MULTIUSOS',x:43.7,y:24.8,next:[7,8]}
 ];
-let current=0;let urls={};const map=document.getElementById('map'),buttons=document.getElementById('stations'),sky=document.getElementById('sky'),hotspots=document.getElementById('hotspots'),status=document.getElementById('status');
+let current=0;let urls={};const map=document.getElementById('map'),buttons=document.getElementById('stations'),sky=document.getElementById('sky'),pathArrow=document.getElementById('pathArrow'),status=document.getElementById('status');
 const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 let activeTexture=null,loadToken=0;
-function setMessage(message){document.getElementById('loading').textContent=message;}
+function setMessage(message){const el=document.getElementById('loading');el.textContent=message;el.style.display=message.startsWith('Imagen visible:')?'none':'block';}
 // Los nombres de archivo originales se conservan. Los puntos 02 y 03 están intercambiados a petición del usuario.
 function showMissing(i) {
+ pathArrow.setAttribute('visible',false);
  const n=nodes[i],mesh=sky.getObject3D('mesh');
  if(mesh){
    if(activeTexture){activeTexture.texture.dispose();activeTexture.material.dispose();activeTexture=null}
@@ -56,6 +63,7 @@ function applyPanorama(sources,i) {
        if(activeTexture){activeTexture.texture.dispose();activeTexture.material.dispose()}
        mesh.material=material;activeTexture={texture,material};
        document.getElementById('intro').setAttribute('visible',false);
+       pathArrow.setAttribute('visible',true);
        setMessage('Imagen visible: '+label+' ('+image.width+' × '+image.height+')');
      }catch(err){setMessage('Error al mostrar imagen: '+err.message);console.error(err)}
    };
@@ -66,31 +74,17 @@ function applyPanorama(sources,i) {
 }
 function show(i){
  current=i;const n=nodes[i];
- document.getElementById('tour-counter').textContent=(i+1)+' / '+nodes.length;
- document.getElementById('prevTour').disabled=i===0;
- document.getElementById('nextTour').textContent=i===nodes.length-1?'Volver al inicio ↻':'Siguiente →';
- document.getElementById('vrAdvance').setAttribute('text','value:'+(i===nodes.length-1?'VOLVER AL INICIO':'AVANZAR >')+';align:center;width:1.8;wrapCount:18;color:#ffffff');
+ pathArrow.setAttribute('visible',false);
  document.querySelectorAll('.pin,.station').forEach(b=>b.classList.toggle('active',+b.dataset.i===i));
  const localFile=urls[i];
  // Primero archivo de prueba, si existe. Si no, imagen pública del repositorio.
  const sources=localFile?[localFile]:['jpg','jpeg','png','webp'].map(ext=>encodeURIComponent(n.key+'.'+ext));
  applyPanorama(sources,i);
- hotspots.innerHTML='';const count=n.next.length;
- n.next.forEach((dest,k)=>{
-  let angle=(-50+(k-(count-1)/2)*42)*Math.PI/180;
-  let e=document.createElement('a-entity');
-  e.setAttribute('position',`${Math.sin(angle)*3.5} -0.65 ${-Math.cos(angle)*3.5}`);
-  e.setAttribute('geometry','primitive:plane;width:1.25;height:0.48');
-  e.setAttribute('material','shader:flat;color:#176e56;opacity:0.9;side:double');
-  e.setAttribute('text',`value:Ir a ${nodes[dest].name.replace(/^\d+ · /,'')};align:center;width:3.4;wrapCount:22;color:white`);
-  e.classList.add('clickable');e.addEventListener('click',()=>show(dest));hotspots.appendChild(e);
- });
+
 }
 
 nodes.forEach((n,i)=>{let b=document.createElement('button');b.className='pin';b.style.left=n.x+'%';b.style.top=n.y+'%';b.textContent=i+1;b.title=n.name;b.dataset.i=i;b.onclick=()=>show(i);map.appendChild(b);let c=document.createElement('button');c.className='station';c.dataset.i=i;c.textContent=n.name;c.onclick=()=>show(i);buttons.appendChild(c)});
 document.getElementById('files').onchange=e=>{urls={};let fs=[...e.target.files];nodes.forEach((n,i)=>{let f=fs.find(f=>norm(f.name).includes(norm(n.key)));if(f)urls[i]=f});let loaded=Object.keys(urls).length;status.textContent=loaded?`${loaded} panorámicas locales reconocidas; los demás puntos buscarán imágenes publicadas.`:'Buscando panorámicas publicadas automáticamente.';show(current)};
-document.getElementById('prevTour').onclick=()=>{if(current>0)show(current-1)};
-document.getElementById('nextTour').onclick=()=>show((current+1)%nodes.length);
-document.getElementById('vrAdvance').addEventListener('click',()=>show((current+1)%nodes.length));
+document.getElementById('arrowHit').addEventListener('click',()=>show((current+1)%nodes.length));
 document.getElementById('toggle').onclick=()=>document.getElementById('panel').classList.toggle('hidden');document.querySelector('a-scene').addEventListener('loaded',()=>show(0));
 </script></body></html>
