@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Espectador | Los Prados de Hunter</title>
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font:14px Arial;background:#122b25;color:#eef9f3}
+#bar{position:fixed;top:14px;left:14px;z-index:10;border-radius:14px;padding:15px;background:#0e3028ee;max-width:calc(100vw - 28px);box-shadow:0 3px 25px #0008}
+h2{font-size:17px;margin:0 0 9px}p{line-height:1.4;margin:8px 0}
+input{width:110px;text-transform:uppercase;letter-spacing:2px;padding:10px;border-radius:8px;border:1px solid #79bfa8;font-weight:bold}
+button{padding:10px;border:none;border-radius:8px;background:#26aa82;color:white;cursor:pointer}
+a{color:#98e4cc}#info{color:#f4d58a;font-size:12px}#name{font-weight:bold}a-scene{height:100vh;width:100vw}
+</style></head><body>
+<div id="bar"><h2>Los Prados · Modo espectador</h2><p>Escribe el código que aparece en los lentes:</p>
+<input id="room" maxlength="6" placeholder="ABC123" autocomplete="off" aria-label="Código de sesión"/>
+<button id="join">Conectar</button>
+<p id="info">Esperando código de sesión.</p><p id="name"></p>
+<p style="font-size:11px">Verás el punto y la orientación del cliente; no es un vídeo del sistema Quest. <a href="./">Volver al visor</a></p></div>
+<a-scene embedded vr-mode-ui="enabled:false" background="color:#24483b" renderer="colorManagement:true;antialias:true" loading-screen="enabled:false">
+<a-sky id="sky" rotation="0 -90 0" color="#24483b"></a-sky>
+<a-entity id="rig"><a-camera id="camera" look-controls="enabled:false" wasd-controls="enabled:false"></a-camera></a-entity>
+<a-entity id="waiting" position="0 0 -4" text="value:Esperando al cliente...;align:center;width:5;color:#ffffff"></a-entity>
+</a-scene>
+<script>
+const names=['01 · Pórtico principal','02 · Parque principal, vista 1','03 · Parque principal, vista 2','04 · Avenida de acceso','05 · Parque del Recuerdo','06 · Avenida interior','07 · Parque para niños','08 · Avenida 03','09 · Avenida 05','10 · Cancha multiusos'];
+const keys=['01. TOUR PÓRTICO','03. TOUR 02 PARQUE1','02. TOUR 01 PARQUE 1','04. TOUR AVENIDA','05. TOUR PARQUE 2','06. TOUR AVENIDA','07. TOUR PARQUE PARA NIÑOS','08. TOUR AVENIDA 03','09. TOUR AVENIDA 05','10. TOUR CANCHA MULTIUSOS'];
+const info=document.getElementById('info'),label=document.getElementById('name'),sky=document.getElementById('sky'),camera=document.getElementById('camera'),waiting=document.getElementById('waiting');
+let peer=null,connection=null,sceneIndex=-1,mode=null,lastQuat=null,imageToken=0,loadedTexture=null,offlineTimer=null;
+function status(s){info.textContent=s}
+function updateImage(index){
+ if(index===sceneIndex)return;
+ sceneIndex=index;
+ const image=new Image();
+ const token=++imageToken;let attempt=0;
+ function next(){
+  if(token!==imageToken)return;
+  if(attempt>=4){status('No se pudo cargar la panorámica '+(index+1));return;}
+  image.src=encodeURIComponent(keys[index]+'.'+['jpg','jpeg','png','webp'][attempt++]);
+ }
+ image.onload=()=>{
+  if(token!==imageToken)return;
+  const mesh=sky.getObject3D('mesh');
+  if(!mesh){status('Cargando escena...');return;}
+  const t=new THREE.Texture(image);t.colorSpace=THREE.SRGBColorSpace;t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;t.generateMipmaps=false;t.needsUpdate=true;
+  const m=new THREE.MeshBasicMaterial({map:t,side:THREE.BackSide});
+  if(loadedTexture){loadedTexture.t.dispose();loadedTexture.m.dispose();}
+  mesh.material=m;loadedTexture={t,m};waiting.setAttribute('visible',false);
+  label.textContent=names[index];
+ };
+ image.onerror=next;next();
+}
+function reset(){
+ if(connection){try{connection.close()}catch(e){}}
+ if(peer){try{peer.destroy()}catch(e){}}
+ peer=null;connection=null;
+}
+function join(){
+ const code=document.getElementById('room').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+ if(!/^[A-Z0-9]{6}$/.test(code)){status('Ingresa el código de 6 caracteres mostrado en los lentes.');return;}
+ reset();status('Conectando...');label.textContent='';
+ if(typeof Peer==='undefined'){status('No cargó la biblioteca de conexión. Comprueba Internet.');return;}
+ peer=new Peer();
+ peer.on('open',()=>{
+  connection=peer.connect('efcom-prados-'+code.toLowerCase(),{reliable:true,serialization:'json'});
+  connection.on('open',()=>{status('Conectado al visor.');connection.send({type:'hello'});});
+  connection.on('data',msg=>{
+    if(!msg||msg.type!=='state')return;
+    if(!Number.isInteger(msg.index)||msg.index<0||msg.index>=keys.length)return;
+    if(msg.map){label.textContent='Cliente viendo el plano · '+names[msg.index];}
+    else updateImage(msg.index);
+    if(msg.q&&msg.q.length===4&&msg.q.every(Number.isFinite)){
+      camera.object3D.quaternion.set(...msg.q);
+    }
+    if(msg.map)status('El cliente está en vista aérea ('+names[msg.index]+').');
+    else status('Sincronizado en tiempo real.');
+  });
+  connection.on('close',()=>status('Conexión cerrada. Puedes reconectar.'));
+  connection.on('error',()=>status('Error de conexión. Prueba de nuevo.'));
+  setTimeout(()=>{if(connection&&!connection.open)status('No conecta. Comprueba que el cliente haya iniciado la sesión y el código sea correcto.');},10000);
+ });
+ peer.on('error',e=>status('Error de red: '+(e.type||'no se puede conectar')+'.'));
+}
+document.getElementById('join').onclick=join;
+document.getElementById('room').onkeydown=e=>{if(e.key==='Enter')join()};
+const params=new URLSearchParams(location.search);if(params.has('sala')){document.getElementById('room').value=params.get('sala');}
+</script></body></html>
