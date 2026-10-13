@@ -9,7 +9,7 @@
 h2{font-size:17px;margin:0 0 9px}p{line-height:1.4;margin:8px 0}
 input{width:110px;text-transform:uppercase;letter-spacing:2px;padding:10px;border-radius:8px;border:1px solid #79bfa8;font-weight:bold}
 button{padding:10px;border:none;border-radius:8px;background:#26aa82;color:white;cursor:pointer}
-a{color:#98e4cc}#info{color:#f4d58a;font-size:12px}#name{font-weight:bold}a-scene{height:100vh;width:100vw}
+a{color:#98e4cc}#info{color:#f4d58a;font-size:12px}#name{font-weight:bold}a-scene{height:100vh;width:100vw}#mapOverlay{display:none;position:fixed;inset:0;z-index:2;background:#102b25ee;align-items:center;justify-content:center}#mapPicture{position:relative;height:min(84vh,86vw);aspect-ratio:882/879;background:url('plano_referencia.png') center/contain no-repeat;border-radius:15px;box-shadow:0 16px 50px #0007}#mapPoint{position:absolute;width:23px;height:23px;border-radius:50%;background:#ffd056;color:#183329;border:2px solid white;text-align:center;font-size:11px;line-height:19px;transform:translate(-50%,-50%)}
 </style></head><body>
 <div id="bar"><h2>Los Prados · Modo espectador</h2><p>Escribe el código que aparece en los lentes:</p>
 <input id="room" maxlength="6" placeholder="ABC123" autocomplete="off" aria-label="Código de sesión"/>
@@ -20,8 +20,9 @@ a{color:#98e4cc}#info{color:#f4d58a;font-size:12px}#name{font-weight:bold}a-scen
 <a-sky id="sky" rotation="0 -90 0" color="#24483b"></a-sky>
 <a-entity id="rig"><a-camera id="camera" look-controls="enabled:false" wasd-controls="enabled:false"></a-camera></a-entity>
 <a-entity id="waiting" position="0 0 -4" text="value:Esperando al cliente...;align:center;width:5;color:#ffffff"></a-entity>
-</a-scene>
+</a-scene><div id="mapOverlay"><div id="mapPicture"><span id="mapPoint">01</span></div></div>
 <script>
+const locations=[{x:72.5,y:46.3},{x:43.4,y:39.3},{x:50.3,y:39.9},{x:64.5,y:25},{x:45.5,y:63.7},{x:37,y:53},{x:32.5,y:54},{x:44.5,y:29},{x:48,y:70},{x:43.7,y:24.8}];
 const names=['01 · Pórtico principal','02 · Parque principal, vista 1','03 · Parque principal, vista 2','04 · Avenida de acceso','05 · Parque del Recuerdo','06 · Avenida interior','07 · Parque para niños','08 · Avenida 03','09 · Avenida 05','10 · Cancha multiusos'];
 const keys=['01. TOUR PÓRTICO','03. TOUR 02 PARQUE1','02. TOUR 01 PARQUE 1','04. TOUR AVENIDA','05. TOUR PARQUE 2','06. TOUR AVENIDA','07. TOUR PARQUE PARA NIÑOS','08. TOUR AVENIDA 03','09. TOUR AVENIDA 05','10. TOUR CANCHA MULTIUSOS'];
 const info=document.getElementById('info'),label=document.getElementById('name'),sky=document.getElementById('sky'),camera=document.getElementById('camera'),waiting=document.getElementById('waiting');
@@ -66,7 +67,8 @@ function join(){
   connection.on('data',msg=>{
     if(!msg||msg.type!=='state')return;
     if(!Number.isInteger(msg.index)||msg.index<0||msg.index>=keys.length)return;
-    if(msg.map){label.textContent='Cliente viendo el plano · '+names[msg.index];}
+    document.getElementById('mapOverlay').style.display=msg.map?'flex':'none';
+    if(msg.map){const point=document.getElementById('mapPoint');point.textContent=String(msg.index+1).padStart(2,'0');point.style.left=locations[msg.index].x+'%';point.style.top=locations[msg.index].y+'%';label.textContent='Cliente viendo el plano · '+names[msg.index];}
     else updateImage(msg.index);
     if(msg.q&&msg.q.length===4&&msg.q.every(Number.isFinite)){
       camera.object3D.quaternion.set(...msg.q);
