@@ -26,7 +26,7 @@ const locations=[{x:72.5,y:46.3},{x:43.4,y:39.3},{x:50.3,y:39.9},{x:64.5,y:25},{
 const names=['01 · Pórtico principal','02 · Parque principal, vista 1','03 · Parque principal, vista 2','04 · Avenida de acceso','05 · Parque del Recuerdo','06 · Avenida interior','07 · Parque para niños','08 · Avenida 03','09 · Avenida 05','10 · Cancha multiusos'];
 const keys=['01. TOUR PÓRTICO','03. TOUR 02 PARQUE1','02. TOUR 01 PARQUE 1','04. TOUR AVENIDA','05. TOUR PARQUE 2','06. TOUR AVENIDA','07. TOUR PARQUE PARA NIÑOS','08. TOUR AVENIDA 03','09. TOUR AVENIDA 05','10. TOUR CANCHA MULTIUSOS'];
 const info=document.getElementById('info'),label=document.getElementById('name'),sky=document.getElementById('sky'),camera=document.getElementById('camera'),waiting=document.getElementById('waiting');
-let peer=null,connection=null,sceneIndex=-1,loadingIndex=-1,imageToken=0,loadedTexture=null,receivedState=false,packetsReceived=0,sceneReady=false;
+let peer=null,connection=null,sceneIndex=-1,loadingIndex=-1,imageToken=0,loadedTexture=null,receivedState=false,receivedWelcome=false,packetsReceived=0,sceneReady=false;
 function status(s){info.textContent=s}
 // Impedir descargas repetidas mientras llegan actualizaciones de orientación (4 por segundo).
 function updateImage(index){
@@ -89,14 +89,16 @@ function reset(){
 function join(){
  const code=document.getElementById('room').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
  if(!/^[A-Z0-9]{6}$/.test(code)){status('Ingresa el código de 6 caracteres mostrado en los lentes.');return;}
- reset();receivedState=false;packetsReceived=0;sceneIndex=-1;loadingIndex=-1;status('Conectando...');label.textContent='';waiting.setAttribute('visible',true);
+ reset();receivedState=false;receivedWelcome=false;packetsReceived=0;sceneIndex=-1;loadingIndex=-1;status('Conectando...');label.textContent='';waiting.setAttribute('visible',true);
  if(typeof Peer==='undefined'){status('No cargó la biblioteca de conexión. Comprueba Internet.');return;}
  peer=new Peer();
  peer.on('open',()=>{
   connection=peer.connect('efcom-prados-'+code.toLowerCase(),{reliable:true,serialization:'json'});
-  connection.on('open',()=>{status('Conectado, esperando el primer panorama...');connection.send({type:'hello'});setTimeout(()=>{if(connection&&connection.open&&!receivedState)status('Conexión establecida, pero los Quest aún no envían datos. Comprueba que la sala siga activa.');},9000);});
+  connection.on('open',()=>{status('Conectado, esperando el primer panorama...');connection.send({type:'hello'});setTimeout(()=>{if(connection&&connection.open&&!receivedState)status(receivedWelcome?'Quest respondió, pero aún no llega la vista. Prueba cambiar de panorámica.':'Conectado a la sala, sin respuesta del visor. Revisa si Compartir sigue activo en Quest.');},9000);});
   connection.on('data',msg=>{
-    if(!msg||msg.type!=='state')return;
+    if(!msg)return;
+    if(msg.type==='welcome'){receivedWelcome=true;status('Quest confirmado. Preparando la imagen...');return;}
+    if(msg.type!=='state')return;
     if(!Number.isInteger(msg.index)||msg.index<0||msg.index>=keys.length)return;
     receivedState=true;packetsReceived++;
     document.getElementById('mapOverlay').style.display=msg.map?'flex':'none';
