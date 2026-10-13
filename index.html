@@ -1,6 +1,11 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:20px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px}#aerialToggle{position:fixed;z-index:12;right:12px;top:56px;background:#173e33d9;border:1px solid #438978;border-radius:999px;color:#e6fff7;font-size:11px;padding:8px 11px;box-shadow:0 3px 14px #071c1844}#aerialInfo{font-size:11px;color:#e2f3e6;padding-top:7px} @media(max-width:650px){#panel{width:260px}#map{height:auto;aspect-ratio:882/879}}</style></head><body>
-<button id="toggle">Ocultar/mostrar mapa</button><button id="aerialToggle" type="button">Ver plano</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="aerialInfo">Marcador amarillo: ubicación actual del render. Ubicaciones aproximadas.</p><p id="help">PC: selecciona una flecha turquesa para elegir destino. Quest 3: activa «Enter VR», apunta a la flecha del destino y aprieta el gatillo. Usa el mapa para saltar a cualquier punto. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:20px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px}#aerialToggle{position:fixed;z-index:12;right:12px;top:56px;background:#173e33d9;border:1px solid #438978;border-radius:999px;color:#e6fff7;font-size:11px;padding:8px 11px;box-shadow:0 3px 14px #071c1844}#aerialInfo{font-size:11px;color:#e2f3e6;padding-top:7px}#broadcast{position:fixed;z-index:12;right:12px;top:97px;background:#184238cf;border:1px solid #4c8b78;border-radius:999px;font-size:11px;color:#fff}#shareStatus{font-size:11px;color:#ffe3a1}#spectatorLink{color:#a8e8d1;font-size:11px} @media(max-width:650px){#panel{width:260px}#map{height:auto;aspect-ratio:882/879}}</style></head><body>
+<button id="toggle">Ocultar/mostrar mapa</button><button id="aerialToggle" type="button">Ver plano</button><button id="broadcast" type="button">Compartir con asesor</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="aerialInfo">Marcador amarillo: ubicación actual del render. Ubicaciones aproximadas.</p><p id="shareStatus">Modo espectador desactivado.</p><p><a id="spectatorLink" href="espectador.html" target="_blank" rel="noopener">Abrir pantalla del asesor</a></p><p id="help">PC: selecciona una flecha turquesa para elegir destino. Quest 3: activa «Enter VR», apunta a la flecha del destino y aprieta el gatillo. Usa el mapa para saltar a cualquier punto. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div>
 <a-scene embedded vr-mode-ui="enabled:true" renderer="colorManagement:true;antialias:true" background="color:#162f2b" cursor="rayOrigin:mouse" raycaster="objects:.clickable" loading-screen="enabled:false"><a-entity id="rig" position="0 0 0"><a-camera look-controls="reverseMouseDrag:false"></a-camera><a-entity laser-controls="hand:right" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity><a-entity laser-controls="hand:left" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity></a-entity><a-sky id="sky" color="#24483b" rotation="0 -90 0"></a-sky><a-entity id="pathChoices" visible="false"></a-entity>
+<a-entity id="vrShareButton" position="2.45 1.18 -2.45" rotation="0 -43 0">
+ <a-plane id="vrShareHit" class="clickable" width="1.05" height="0.25"
+ material="shader:flat;color:#246653;opacity:0.80;side:double"
+ text="value:COMPARTIR;align:center;width:2.3;color:#ffffff"></a-plane>
+</a-entity>
 <a-entity id="aerialEntry" position="-2.45 1.32 -2.60" rotation="0 43 0">
   <a-plane id="aerialEntryHit" class="clickable" width="0.80" height="0.22"
    material="shader:flat;color:#113d35;opacity:0.59;transparent:true;side:double"
@@ -305,6 +310,72 @@ document.getElementById('aerialSelect').addEventListener('click',event=>{
 toggleAerial.onclick=()=>mapMode?exitAerial():enterAerial();
 switchAerialHitState(false);
 updateAerialEntryVisibility();
+
+
+const broadcastButton=document.getElementById('broadcast');
+const vrShareButton=document.getElementById('vrShareHit');
+const broadcastLabel=document.getElementById('shareStatus');
+const spectatorLink=document.getElementById('spectatorLink');
+const vrCamera=document.querySelector('a-camera');
+let roomPeer=null,roomCode='',roomConnections=[],lastBroadcastAt=0;
+const worldOrientation=new THREE.Quaternion();
+function broadcastState(){
+ if(!roomPeer||!roomPeer.open)return;
+ vrCamera.object3D.getWorldQuaternion(worldOrientation);
+ const state={
+   type:'state',index:current,map:mapMode,
+   q:[worldOrientation.x,worldOrientation.y,worldOrientation.z,worldOrientation.w]
+ };
+ roomConnections=roomConnections.filter(conn=>conn.open);
+ for(const conn of roomConnections){try{conn.send(state);}catch(e){console.warn('Problema al sincronizar',e)}}
+}
+function createRoomCode(){
+ const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+ const bytes=new Uint8Array(6);crypto.getRandomValues(bytes);
+ return Array.from(bytes,v=>alphabet[v%alphabet.length]).join('');
+}
+function updateShareUi(text){
+ broadcastLabel.textContent=text;
+ broadcastButton.textContent=roomCode?'Sala '+roomCode:'Compartir con asesor';
+ vrShareButton.setAttribute('text',
+   'value:'+(roomCode?'SALA '+roomCode:'COMPARTIR')+';align:center;width:2.3;color:#ffffff');
+}
+function stopSharing(){
+ roomConnections.forEach(conn=>{try{conn.close()}catch(e){}});
+ roomConnections=[];
+ if(roomPeer){try{roomPeer.destroy()}catch(e){}}
+ roomPeer=null;roomCode='';
+ spectatorLink.href='espectador.html';
+ updateShareUi('Modo espectador desactivado.');
+}
+function startSharing(){
+ if(roomPeer){stopSharing();return;}
+ if(typeof Peer==='undefined'){updateShareUi('No se pudo cargar el servicio de conexión. Revisa Internet.');return;}
+ roomCode=createRoomCode();
+ updateShareUi('Iniciando sesión '+roomCode+'...');
+ roomPeer=new Peer('efcom-prados-'+roomCode.toLowerCase());
+ roomPeer.on('open',()=>{
+   spectatorLink.href='espectador.html?sala='+roomCode;
+   updateShareUi('Código del asesor: '+roomCode+'. Abre espectador.html en tu PC.');
+ });
+ roomPeer.on('connection',conn=>{
+   roomConnections.push(conn);
+   conn.on('open',()=>{
+     updateShareUi('Asesor conectado · Sala '+roomCode);
+     broadcastState();
+   });
+   conn.on('close',()=>{roomConnections=roomConnections.filter(c=>c!==conn);updateShareUi('Sala '+roomCode+' · esperando asesor');});
+   conn.on('error',()=>updateShareUi('Falló la conexión del asesor; intenta reconectar.'));
+ });
+ roomPeer.on('error',e=>{
+   updateShareUi('Error de sesión '+(e.type||'red')+'. Pulsa para reintentar.');
+   if(e.type==='unavailable-id')stopSharing();
+ });
+}
+broadcastButton.addEventListener('click',startSharing);
+vrShareButton.addEventListener('click',startSharing);
+setInterval(()=>{if(roomPeer&&roomPeer.open)broadcastState();},250);
+window.addEventListener('pagehide',()=>{if(roomPeer)roomPeer.destroy()});
 
 document.getElementById('toggle').onclick=()=>document.getElementById('panel').classList.toggle('hidden');document.querySelector('a-scene').addEventListener('loaded',()=>show(0));
 </script></body></html>
