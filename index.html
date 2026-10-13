@@ -105,7 +105,7 @@ function renderChoices(i){
    const label=document.createElement('a-entity');
    label.setAttribute('position','0 -0.205 0.060');
    label.setAttribute('text',{
-      value:nodes[dest].name.replace(/^\\d+\\s*·\\s*/,''),
+      value:nodes[dest].name.split(' · ').slice(1).join(' · '),
       align:'center',color:'#f2ffff',width:1.55,wrapCount:26,
       baseline:'center'
    });
