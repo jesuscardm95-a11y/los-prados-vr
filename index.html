@@ -1,18 +1,12 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:20px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px} @media(max-width:650px){#panel{width:260px}#map{height:auto;aspect-ratio:882/879}}</style></head><body>
-<button id="toggle">Ocultar/mostrar mapa</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="help">PC: arrastra para mirar y pulsa la pequeña flecha turquesa del camino. Quest 3: entra en VR, apunta a la flecha con el controlador y presiona el gatillo. Usa el mapa para saltar a cualquier vista. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div>
-<a-scene embedded vr-mode-ui="enabled:true" renderer="colorManagement:true;antialias:true" background="color:#162f2b" cursor="rayOrigin:mouse" raycaster="objects:.clickable" loading-screen="enabled:false"><a-entity id="rig" position="0 0 0"><a-camera look-controls="reverseMouseDrag:false"></a-camera><a-entity laser-controls="hand:right" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity><a-entity laser-controls="hand:left" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity></a-entity><a-sky id="sky" color="#24483b" rotation="0 -90 0"></a-sky><a-entity id="pathArrow" position="0 -1.12 -3.25" rotation="-90 0 0" visible="false">
-  <a-plane id="arrowHit" class="clickable" width="0.80" height="0.72" material="shader:flat;color:#32d9cd;opacity:0.002;transparent:true;depthWrite:false;side:double"></a-plane>
-  <a-entity id="arrowGraphic" position="0 0 0.012" animation="property:scale;from:0.96 0.96 0.96;to:1.04 1.04 1.04;dir:alternate;dur:1700;loop:true;easing:easeInOutSine">
-    <a-plane position="-0.088 0.032 0.005" rotation="0 0 45" width="0.255" height="0.034" material="shader:flat;color:#54e0d8;opacity:0.78;transparent:true;depthWrite:false;side:double"></a-plane>
-    <a-plane position="0.088 0.032 0.005" rotation="0 0 -45" width="0.255" height="0.034" material="shader:flat;color:#54e0d8;opacity:0.78;transparent:true;depthWrite:false;side:double"></a-plane>
-  </a-entity>
-</a-entity><a-entity position="0 0 -4" id="intro" text="value:Cargando panorama;align:center;width:4;color:#ffffff"></a-entity></a-scene>
+<button id="toggle">Ocultar/mostrar mapa</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="help">PC: selecciona una flecha turquesa para elegir destino. Quest 3: activa «Enter VR», apunta a la flecha del destino y aprieta el gatillo. Usa el mapa para saltar a cualquier punto. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div>
+<a-scene embedded vr-mode-ui="enabled:true" renderer="colorManagement:true;antialias:true" background="color:#162f2b" cursor="rayOrigin:mouse" raycaster="objects:.clickable" loading-screen="enabled:false"><a-entity id="rig" position="0 0 0"><a-camera look-controls="reverseMouseDrag:false"></a-camera><a-entity laser-controls="hand:right" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity><a-entity laser-controls="hand:left" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity></a-entity><a-sky id="sky" color="#24483b" rotation="0 -90 0"></a-sky><a-entity id="pathChoices" visible="false"></a-entity><a-entity position="0 0 -4" id="intro" text="value:Cargando panorama;align:center;width:4;color:#ffffff"></a-entity></a-scene>
 <script>
 const nodes=[
  {name:'01 · Pórtico principal',key:'01. TOUR PÓRTICO',x:72.5,y:46.3,next:[1]},
  {name:'02 · Parque principal, vista 1',key:'03. TOUR 02 PARQUE1',x:43.4,y:39.3,next:[0,2,3]},
  {name:'03 · Parque principal, vista 2',key:'02. TOUR 01 PARQUE 1',x:50.3,y:39.9,next:[1,4]},
- {name:'04 · Avenida de acceso',key:'04. TOUR AVENIDA',x:64.5,y:25,next:[0,1,5]},
+ {name:'04 · Avenida de acceso',key:'04. TOUR AVENIDA',x:64.5,y:25,next:[4,2]},
  {name:'05 · Parque del Recuerdo',key:'05. TOUR PARQUE 2',x:45.5,y:63.7,next:[2,6]},
  {name:'06 · Avenida interior',key:'06. TOUR AVENIDA',x:37,y:53,next:[3,4,7]},
  {name:'07 · Parque para niños',key:'07. TOUR PARQUE PARA NIÑOS',x:32.5,y:54,next:[5,8]},
@@ -20,13 +14,13 @@ const nodes=[
  {name:'09 · Avenida 05',key:'09. TOUR AVENIDA 05',x:48,y:70,next:[4,9]},
  {name:'10 · Cancha multiusos',key:'10. TOUR CANCHA MULTIUSOS',x:43.7,y:24.8,next:[7,8]}
 ];
-let current=0;let urls={};const map=document.getElementById('map'),buttons=document.getElementById('stations'),sky=document.getElementById('sky'),pathArrow=document.getElementById('pathArrow'),status=document.getElementById('status');
+let current=0;let urls={};const map=document.getElementById('map'),buttons=document.getElementById('stations'),sky=document.getElementById('sky'),pathChoices=document.getElementById('pathChoices'),status=document.getElementById('status');
 const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 let activeTexture=null,loadToken=0;
 function setMessage(message){const el=document.getElementById('loading');el.textContent=message;el.style.display=message.startsWith('Imagen visible:')?'none':'block';}
 // Los nombres de archivo originales se conservan. Los puntos 02 y 03 están intercambiados a petición del usuario.
 function showMissing(i) {
- pathArrow.setAttribute('visible',false);
+ pathChoices.setAttribute('visible',false);
  const n=nodes[i],mesh=sky.getObject3D('mesh');
  if(mesh){
    if(activeTexture){activeTexture.texture.dispose();activeTexture.material.dispose();activeTexture=null}
@@ -63,7 +57,7 @@ function applyPanorama(sources,i) {
        if(activeTexture){activeTexture.texture.dispose();activeTexture.material.dispose()}
        mesh.material=material;activeTexture={texture,material};
        document.getElementById('intro').setAttribute('visible',false);
-       pathArrow.setAttribute('visible',true);
+       renderChoices(i);
        setMessage('Imagen visible: '+label+' ('+image.width+' × '+image.height+')');
      }catch(err){setMessage('Error al mostrar imagen: '+err.message);console.error(err)}
    };
@@ -72,9 +66,57 @@ function applyPanorama(sources,i) {
  }
  attempt();
 }
+
+function renderChoices(i){
+ pathChoices.innerHTML='';
+ const targets=[...new Set(nodes[i].next||[])].filter(d=>Number.isInteger(d)&&d>=0&&d<nodes.length&&d!==i);
+ if(!targets.length){pathChoices.setAttribute('visible',false);return;}
+ targets.forEach((dest,k)=>{
+   const group=document.createElement('a-entity');
+   const x=(k-(targets.length-1)/2)*1.08;
+   group.setAttribute('position',x+' -0.57 -2.85');
+   group.setAttribute('rotation','-24 0 0');
+   const hit=document.createElement('a-plane');
+   hit.classList.add('clickable');
+   hit.setAttribute('position','0 -0.07 0.035');
+   hit.setAttribute('width','0.98');
+   hit.setAttribute('height','0.66');
+   hit.setAttribute('material','shader:flat;color:#ffffff;transparent:true;opacity:0.005;depthWrite:false;side:double');
+   hit.addEventListener('click',()=>show(dest));
+   group.appendChild(hit);
+   const graphic=document.createElement('a-entity');
+   graphic.setAttribute('animation','property:scale;from:0.97 0.97 0.97;to:1.04 1.04 1.04;dur:1650;dir:alternate;loop:true;easing:easeInOutSine');
+   [-1,1].forEach(side=>{
+     const seg=document.createElement('a-plane');
+     seg.setAttribute('position',(side*0.088)+' 0.078 0.055');
+     seg.setAttribute('rotation','0 0 '+(side===-1?45:-45));
+     seg.setAttribute('width','0.255');
+     seg.setAttribute('height','0.034');
+     seg.setAttribute('material','shader:flat;color:#60e4d9;opacity:0.83;transparent:true;depthWrite:false;side:double');
+     graphic.appendChild(seg);
+   });
+   group.appendChild(graphic);
+   const plate=document.createElement('a-plane');
+   plate.setAttribute('position','0 -0.205 0.028');
+   plate.setAttribute('width','1.00');
+   plate.setAttribute('height','0.25');
+   plate.setAttribute('material','shader:flat;color:#102d2d;opacity:0.40;transparent:true;depthWrite:false;side:double');
+   group.appendChild(plate);
+   const label=document.createElement('a-entity');
+   label.setAttribute('position','0 -0.205 0.060');
+   label.setAttribute('text',{
+      value:nodes[dest].name.replace(/^\\d+\\s*·\\s*/,''),
+      align:'center',color:'#f2ffff',width:1.55,wrapCount:26,
+      baseline:'center'
+   });
+   group.appendChild(label);
+   pathChoices.appendChild(group);
+ });
+ pathChoices.setAttribute('visible',true);
+}
 function show(i){
  current=i;const n=nodes[i];
- pathArrow.setAttribute('visible',false);
+ pathChoices.setAttribute('visible',false);
  document.querySelectorAll('.pin,.station').forEach(b=>b.classList.toggle('active',+b.dataset.i===i));
  const localFile=urls[i];
  // Primero archivo de prueba, si existe. Si no, imagen pública del repositorio.
@@ -85,6 +127,5 @@ function show(i){
 
 nodes.forEach((n,i)=>{let b=document.createElement('button');b.className='pin';b.style.left=n.x+'%';b.style.top=n.y+'%';b.textContent=i+1;b.title=n.name;b.dataset.i=i;b.onclick=()=>show(i);map.appendChild(b);let c=document.createElement('button');c.className='station';c.dataset.i=i;c.textContent=n.name;c.onclick=()=>show(i);buttons.appendChild(c)});
 document.getElementById('files').onchange=e=>{urls={};let fs=[...e.target.files];nodes.forEach((n,i)=>{let f=fs.find(f=>norm(f.name).includes(norm(n.key)));if(f)urls[i]=f});let loaded=Object.keys(urls).length;status.textContent=loaded?`${loaded} panorámicas locales reconocidas; los demás puntos buscarán imágenes publicadas.`:'Buscando panorámicas publicadas automáticamente.';show(current)};
-document.getElementById('arrowHit').addEventListener('click',()=>show((current+1)%nodes.length));
 document.getElementById('toggle').onclick=()=>document.getElementById('panel').classList.toggle('hidden');document.querySelector('a-scene').addEventListener('loaded',()=>show(0));
 </script></body></html>
