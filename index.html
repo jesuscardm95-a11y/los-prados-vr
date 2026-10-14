@@ -208,6 +208,7 @@ function renderChoices(i){
  pathChoices.setAttribute('visible',true);
 }
 function show(i){
+ if(window.matchMedia('(max-width:650px)').matches){document.getElementById('panel').classList.add('hidden');}
  if(mapMode)exitAerial(false);
  current=i;
  updateAerialEntryVisibility();const n=nodes[i];
