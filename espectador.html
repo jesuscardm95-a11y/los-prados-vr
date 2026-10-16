@@ -22,7 +22,26 @@ a{color:#98e4cc}#info{color:#f4d58a;font-size:12px}#name{font-weight:bold}a-scen
 <a-entity id="waiting" position="0 0 -4" text="value:Esperando al cliente...;align:center;width:5;color:#ffffff"></a-entity>
 </a-scene><div id="mapOverlay"><div id="mapPicture"><span id="mapPoint">01</span></div></div>
 <script>
-const locations=[{x:72.5,y:46.3},{x:43.4,y:39.3},{x:50.3,y:39.9},{x:64.5,y:25},{x:45.5,y:63.7},{x:37,y:53},{x:32.5,y:54},{x:44.5,y:29},{x:48,y:70},{x:43.7,y:24.8}];
+let locations=[{x:72.5,y:46.3},{x:43.4,y:39.3},{x:50.3,y:39.9},{x:64.5,y:25},{x:45.5,y:63.7},{x:37,y:53},{x:32.5,y:54},{x:44.5,y:29},{x:48,y:70},{x:43.7,y:24.8}];
+const newMapPositions=[[46.7,77.5],[48.7,71.0],[50.6,64.9],[71.7,67.2],[21.4,46.6],[54.9,24.8],[39.5,29.3],[56.1,33.8],[62,48.5],[80.2,52.4]];
+function updateMapInSpectator(){
+ const newer=new Image();
+ newer.onload=()=>{
+   const picture=document.getElementById('mapPicture');
+   picture.style.backgroundImage="url('Los_Prados_Plano_Optimizado_VR.jpg')";
+   picture.style.aspectRatio='1402/1122';
+   picture.style.width='min(90vw, calc(84vh * 1.24955))';
+   picture.style.height='auto';
+   locations=newMapPositions.map(([x,y])=>({x,y}));
+   if(sceneIndex>=0){
+      const point=document.getElementById('mapPoint');
+      point.style.left=locations[sceneIndex].x+'%';
+      point.style.top=locations[sceneIndex].y+'%';
+   }
+ };
+ newer.src='Los_Prados_Plano_Optimizado_VR.jpg';
+}
+updateMapInSpectator();
 const names=['01 · Pórtico principal','02 · Parque principal, vista 1','03 · Parque principal, vista 2','04 · Avenida de acceso','05 · Parque del Recuerdo','06 · Avenida interior','07 · Parque para niños','08 · Avenida 03','09 · Avenida 05','10 · Cancha multiusos'];
 const keys=['01. TOUR PÓRTICO','03. TOUR 02 PARQUE1','02. TOUR 01 PARQUE 1','04. TOUR AVENIDA','05. TOUR PARQUE 2','06. TOUR AVENIDA','07. TOUR PARQUE PARA NIÑOS','08. TOUR AVENIDA 03','09. TOUR AVENIDA 05','10. TOUR CANCHA MULTIUSOS'];
 const info=document.getElementById('info'),label=document.getElementById('name'),sky=document.getElementById('sky'),camera=document.getElementById('camera'),waiting=document.getElementById('waiting'),diag=document.getElementById('diag');
