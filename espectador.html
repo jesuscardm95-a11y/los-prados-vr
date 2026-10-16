@@ -157,7 +157,19 @@ function join(){
   connection.on('error',e=>{status('Error de conexión. Prueba de nuevo.');diagnostics('error de WebRTC: '+(e&&e.message||String(e)))});
   setTimeout(()=>{if(connection&&!connection.open)status('No conecta. Comprueba que el cliente haya iniciado la sesión y el código sea correcto.');},10000);
  });
- peer.on('error',e=>{status('Error de red: '+(e.type||'no se puede conectar')+'.');diagnostics('señalización: '+(e.type||'desconocido'));});
+ peer.on('disconnected',()=>{
+   diagnostics('servidor de sesiones desconectado: intentando reconectar');
+   try{if(peer&&peer.disconnected&&!peer.destroyed)peer.reconnect();}catch(err){diagnostics('No se pudo reconectar: '+err.message);}
+ });
+ peer.on('error',e=>{
+   const type=e&&e.type||'desconocido';
+   if(type==='peer-unavailable'){
+     status('Ese código no tiene una sala activa. Pide un código nuevo en los Quest.');
+   }else{
+     status('Error de conexión: '+type+'. Comprueba la sesión.');
+   }
+   diagnostics('error de señalización: '+type);
+ });
 }
 document.getElementById('join').onclick=join;
 document.getElementById('testImage').onclick=()=>{
@@ -165,5 +177,10 @@ document.getElementById('testImage').onclick=()=>{
   sceneIndex=-1;loadingIndex=-1;updateImage(0);
 };
 document.getElementById('room').onkeydown=e=>{if(e.key==='Enter')join()};
-const params=new URLSearchParams(location.search);if(params.has('sala')){document.getElementById('room').value=params.get('sala');}
+const params=new URLSearchParams(location.search);
+if(params.has('sala')){
+ const code=params.get('sala').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+ document.getElementById('room').value=code;
+ if(/^[A-Z0-9]{6}$/.test(code))join();
+}
 </script></body></html>
