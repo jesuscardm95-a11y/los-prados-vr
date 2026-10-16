@@ -420,10 +420,10 @@ const shareCodeLabel=document.getElementById('shareCode');
 const broadcastLabel=document.getElementById('shareStatus');
 const spectatorLink=document.getElementById('spectatorLink');
 const vrCamera=document.querySelector('a-camera');
-let roomPeer=null,roomCode='',roomConnections=[],lastBroadcastAt=0;
+let roomPeer=null,roomCode='',roomConnections=[],shareReady=false,shareGeneration=0;
 const worldOrientation=new THREE.Quaternion();
 function broadcastState(){
- if(!roomPeer||!roomPeer.open)return;
+ if(!roomPeer)return; // Los canales WebRTC abiertos siguen enviando aunque la señalización se reconecte.
  try{vrCamera.object3D.updateMatrixWorld(true);vrCamera.object3D.getWorldQuaternion(worldOrientation);}catch(err){console.warn('Orientación no disponible',err);worldOrientation.identity();}
  const state={
    type:'state',index:current,map:mapMode,
@@ -443,15 +443,16 @@ function createRoomCode(){
 }
 function updateShareUi(text){
  broadcastLabel.textContent=text;
- broadcastButton.textContent=roomCode?'Detener compartir':'Compartir con asesor';
- shareCodeLabel.style.display=roomCode?'block':'none';
- shareCodeLabel.textContent=roomCode?'Código del asesor: '+roomCode:'';
+ broadcastButton.textContent=roomPeer?'Detener compartir':'Compartir con asesor';
+ shareCodeLabel.style.display=shareReady?'block':'none';
+ shareCodeLabel.textContent=shareReady?'Código del asesor: '+roomCode:'';
 }
 function stopSharing(){
+ shareGeneration++;
  roomConnections.forEach(conn=>{try{conn.close()}catch(e){}});
  roomConnections=[];
  if(roomPeer){try{roomPeer.destroy()}catch(e){}}
- roomPeer=null;roomCode='';
+ roomPeer=null;roomCode='';shareReady=false;
  spectatorLink.href='espectador.html';
  updateShareUi('Modo espectador desactivado.');
 }
@@ -459,13 +460,30 @@ function startSharing(){
  if(roomPeer){stopSharing();return;}
  if(typeof Peer==='undefined'){updateShareUi('No se pudo cargar el servicio de conexión. Revisa Internet.');return;}
  roomCode=createRoomCode();
- updateShareUi('Iniciando sesión '+roomCode+'...');
- roomPeer=new Peer('efcom-prados-'+roomCode.toLowerCase());
- roomPeer.on('open',()=>{
+ shareReady=false;
+ const session=++shareGeneration;
+ updateShareUi('Preparando sala para el asesor…');
+ try{roomPeer=new Peer('efcom-prados-'+roomCode.toLowerCase());}
+ catch(error){roomPeer=null;roomCode='';updateShareUi('Error al iniciar la transmisión: '+error.message);return;}
+ const hostPeer=roomPeer;
+ hostPeer.on('open',()=>{
+   if(roomPeer!==hostPeer||session!==shareGeneration)return;
+   shareReady=true;
    spectatorLink.href='espectador.html?sala='+roomCode;
-   updateShareUi('Código del asesor: '+roomCode+'. Abre espectador.html en tu PC.');
+   updateShareUi('Sala lista. Introduce '+roomCode+' en la PC del asesor.');
  });
- roomPeer.on('connection',conn=>{
+ hostPeer.on('disconnected',()=>{
+   if(roomPeer!==hostPeer||session!==shareGeneration)return;
+   updateShareUi('Se interrumpió la conexión del servidor; intentando recuperar la sala '+roomCode+'…');
+   try{if(hostPeer.disconnected&&!hostPeer.destroyed)hostPeer.reconnect();}catch(error){console.warn('Reconexión PeerJS',error);}
+ });
+ hostPeer.on('close',()=>{
+   if(roomPeer!==hostPeer||session!==shareGeneration)return;
+   roomPeer=null;shareReady=false;roomCode='';roomConnections=[];
+   spectatorLink.href='espectador.html';
+   updateShareUi('La sesión terminó. Pulsa Compartir para crear una nueva.');
+ });
+ hostPeer.on('connection',conn=>{
    // Se conserva la referencia incluso antes de que el canal termine de abrir.
    roomConnections.push(conn);
    conn.on('open',()=>{
@@ -481,13 +499,23 @@ function startSharing(){
    conn.on('close',()=>{roomConnections=roomConnections.filter(c=>c!==conn);updateShareUi('Sala '+roomCode+' · esperando asesor');});
    conn.on('error',()=>updateShareUi('Falló la conexión del asesor; intenta reconectar.'));
  });
- roomPeer.on('error',e=>{
-   updateShareUi('Error de sesión '+(e.type||'red')+'. Pulsa para reintentar.');
-   if(e.type==='unavailable-id')stopSharing();
+ hostPeer.on('error',e=>{
+   if(roomPeer!==hostPeer||session!==shareGeneration)return;
+   const errorType=e&&e.type||'red';
+   if(errorType==='unavailable-id'){
+     stopSharing();
+     updateShareUi('Este código ya estaba en uso. Pulsa Compartir para generar otro.');
+     return;
+   }
+   if(errorType==='network'||errorType==='server-error'){
+     updateShareUi('Problema de red: '+errorType+'. Intentando mantener la sesión '+roomCode+'.');
+   }else{
+     updateShareUi('Error de sesión: '+errorType+'. Si persiste, pulsa Detener y vuelve a compartir.');
+   }
  });
 }
 broadcastButton.addEventListener('click',startSharing);
-setInterval(()=>{if(roomPeer&&roomPeer.open)broadcastState();},250);
+setInterval(()=>{if(roomPeer)broadcastState();},250);
 window.addEventListener('pagehide',()=>{if(roomPeer)roomPeer.destroy()});
 
 document.getElementById('toggle').onclick=()=>document.getElementById('panel').classList.toggle('hidden');document.querySelector('a-scene').addEventListener('loaded',()=>show(0));
