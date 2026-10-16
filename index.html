@@ -1,6 +1,6 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}body.newPlan #map{aspect-ratio:1402/1122}body.newPlan #map .pin{color:transparent;background:transparent;border:3px solid transparent;width:35px;height:35px;box-shadow:none}body.newPlan #map .pin.active{border-color:#ffe178;box-shadow:0 0 0 3px #153d33a8,0 0 16px #ffe1789c}body.newPlan #map .pin:hover{border-color:#9cece1}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:20px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px}#aerialToggle{position:fixed;z-index:12;right:12px;top:56px;background:#173e33d9;border:1px solid #438978;border-radius:999px;color:#e6fff7;font-size:11px;padding:8px 11px;box-shadow:0 3px 14px #071c1844}#aerialInfo{font-size:11px;color:#e2f3e6;padding-top:7px}#broadcast{position:fixed;z-index:12;right:12px;top:97px;background:#184238cf;border:1px solid #4c8b78;border-radius:999px;font-size:11px;color:#fff}#shareStatus{font-size:11px;color:#ffe3a1}#spectatorLink{color:#a8e8d1;font-size:11px} @media(max-width:650px){#panel{width:min(340px,calc(100vw - 28px));top:62px;max-height:calc(100dvh - 76px);display:none;box-shadow:0 12px 36px #0008}#panel:not(.hidden){display:block}#map{height:auto}body:not(.newPlan) #map{aspect-ratio:882/879}#toggle{top:12px;right:auto;left:12px;font-size:13px;padding:10px 14px;box-shadow:0 4px 16px #0008}#aerialToggle{top:12px;right:12px}#broadcast{top:56px;right:12px}}#flatPlan{display:none;position:fixed;inset:0;z-index:30;background:#0b211beF;box-sizing:border-box;padding:64px 12px 18px;align-items:center;justify-content:center;flex-direction:column}#flatPlan.open{display:flex}#flatPlanClose{position:absolute;top:12px;right:12px;background:#267c61;font-size:14px;padding:11px 15px}#flatPlanImg{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;transform-origin:center center}#flatPlanViewport{width:100%;height:100%;overflow:auto;display:flex;align-items:center;justify-content:center;touch-action:pan-x pan-y}#flatPlanImageWrap{position:relative;display:block;flex:0 0 auto;width:min(100%,calc((100dvh - 95px) * 1.0034));aspect-ratio:882/879;transform-origin:center center}#flatPlanImg{display:block;width:100%;height:100%;object-fit:fill}#flatCurrentPin{position:absolute;z-index:3;transform:translate(-50%,-50%);width:34px;height:34px;border:4px solid #fff;border-radius:50%;background:#ffce59;color:#173c2f;display:flex;align-items:center;justify-content:center;font:bold 14px Arial,sans-serif;box-shadow:0 0 0 5px #ffce5980,0 3px 14px #0009;pointer-events:none}#flatPlanControls{position:absolute;top:12px;left:12px;display:flex;gap:4px}#flatPlanControls button{font-size:14px} @media(max-width:650px){#flatPlan{padding:66px 8px 10px}#flatPlanClose{font-size:12px}#flatPlanControls button{padding:9px}}
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Los Prados de Hunter | Tour VR</title><script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script><script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script><style>body{margin:0;font-family:Arial,sans-serif;background:#101b1a;color:white}#panel{position:fixed;z-index:10;left:14px;top:14px;width:310px;max-width:calc(100vw - 28px);background:#11251fe8;border:1px solid #4c856f;border-radius:16px;padding:14px;box-sizing:border-box;max-height:88vh;overflow:auto}h2{margin:0 0 8px;font-size:19px}p{font-size:12px;line-height:1.4;color:#c5ded4}button,label.upload{display:inline-block;background:#267c61;color:white;border:0;border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px;margin:3px 2px}button:hover{background:#38a07c}button.active{background:#d8aa42;color:#19201b}input{display:none}#map{position:relative;width:100%;aspect-ratio:882/879;background:url('plano_referencia.png') center / 100% 100%;border-radius:9px;overflow:hidden}body.newPlan #map{aspect-ratio:1402/1122}body.newPlan #map .pin{color:transparent;background:transparent;border:3px solid transparent;width:35px;height:35px;box-shadow:none}body.newPlan #map .pin.active{border-color:#ffe178;box-shadow:0 0 0 3px #153d33a8,0 0 16px #ffe1789c}body.newPlan #map .pin:hover{border-color:#9cece1}#map:after{content:'';position:absolute;inset:0;pointer-events:none;background:#0003}.pin{position:absolute;transform:translate(-50%,-50%);z-index:1;background:#fff;color:#173c2f;border:2px solid #267c61;border-radius:100%;width:25px;height:25px;padding:0;font-weight:bold}.pin.active{background:#ffce59;border-color:white}.pin:hover{background:#ffce59}#stations{display:flex;flex-wrap:wrap}#status{font-size:12px;color:#ffda8a}#toggle{position:fixed;z-index:11;top:12px;right:12px;background:#163b31}#panel.hidden{display:none}a-scene{height:100vh;width:100vw}#help{font-size:11px;color:#cbd9d2}#loading{position:fixed;z-index:4;bottom:20px;right:20px;background:#12382d;padding:10px;border-radius:9px;font-size:12px}#aerialToggle{position:fixed;z-index:12;right:12px;top:56px;background:#173e33d9;border:1px solid #438978;border-radius:999px;color:#e6fff7;font-size:11px;padding:8px 11px;box-shadow:0 3px 14px #071c1844}#aerialInfo{font-size:11px;color:#e2f3e6;padding-top:7px}#broadcast{position:fixed;z-index:12;right:12px;top:97px;background:#184238cf;border:1px solid #4c8b78;border-radius:999px;font-size:11px;color:#fff}#shareStatus{font-size:11px;color:#ffe3a1}#spectatorLink{color:#a8e8d1;font-size:11px} @media(max-width:650px){#panel{width:min(340px,calc(100vw - 28px));top:62px;max-height:calc(100dvh - 76px);display:none;box-shadow:0 12px 36px #0008}#panel:not(.hidden){display:block}#map{height:auto}body:not(.newPlan) #map{aspect-ratio:882/879}#toggle{top:12px;right:auto;left:12px;font-size:13px;padding:10px 14px;box-shadow:0 4px 16px #0008}#aerialToggle{top:12px;right:12px}#broadcast{top:56px;right:12px}}#flatPlan{display:none;position:fixed;inset:0;z-index:30;background:#0b211beF;box-sizing:border-box;padding:64px 12px 18px;align-items:center;justify-content:center;flex-direction:column}#flatPlan.open{display:flex}#flatPlanClose{position:absolute;top:12px;right:12px;background:#267c61;font-size:14px;padding:11px 15px}#flatPlanImg{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;transform-origin:center center}#flatPlanViewport{width:100%;height:100%;overflow:auto;display:flex;align-items:center;justify-content:center;touch-action:pan-x pan-y}#flatPlanImageWrap{position:relative;display:block;flex:0 0 auto;width:min(100%,calc((100dvh - 95px) * 1.0034));aspect-ratio:882/879;transform-origin:center center}#flatPlanImg{display:block;width:100%;height:100%;object-fit:fill}#flatCurrentPin{position:absolute;z-index:3;transform:translate(-50%,-50%);width:34px;height:34px;border:4px solid #fff;border-radius:50%;background:#ffce59;color:#173c2f;display:flex;align-items:center;justify-content:center;font:bold 14px Arial,sans-serif;box-shadow:0 0 0 5px #ffce5980,0 3px 14px #0009;pointer-events:none}#flatPlanControls{position:absolute;top:12px;left:12px;display:flex;gap:4px}#flatDestinationPin{position:absolute;z-index:4;display:none;align-items:center;justify-content:center;transform:translate(-50%,-50%);width:40px;height:40px;border:4px solid white;border-radius:50%;background:#20bfc3;color:#0e292c;font-weight:bold;box-shadow:0 0 0 5px #32e9e780,0 2px 13px #000a;pointer-events:none}#flatDestinationNote{position:absolute;bottom:12px;left:12px;right:12px;background:#102f2bc9;color:#eafff8;text-align:center;padding:7px;font-size:12px;border-radius:8px;pointer-events:none}#flatPlanControls button{font-size:14px} @media(max-width:650px){#flatPlan{padding:66px 8px 10px}#flatPlanClose{font-size:12px}#flatPlanControls button{padding:9px}}
 </style></head><body>
-<button id="toggle">Ocultar/mostrar mapa</button><button id="aerialToggle" type="button">Ver plano</button><button id="broadcast" type="button">Compartir con asesor</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="aerialInfo">Marcador amarillo: ubicación actual del render. Ubicaciones aproximadas.</p><p id="shareStatus">Modo espectador desactivado.</p><p id="shareCode" style="display:none;color:#ffe3a1;font-size:13px;font-weight:bold;letter-spacing:.6px"></p><p><a id="spectatorLink" href="espectador.html" target="_blank" rel="noopener">Abrir pantalla del asesor</a></p><p id="help">PC: selecciona una flecha turquesa para elegir destino. Quest 3: activa «Enter VR», apunta a la flecha del destino y aprieta el gatillo. Usa el mapa para saltar a cualquier punto. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div><div id="flatPlan" aria-label="Plano del proyecto"><div id="flatPlanControls"><button type="button" id="flatMinus">−</button><button type="button" id="flatPlus">+</button></div><button type="button" id="flatPlanClose">Volver al recorrido</button><div id="flatPlanViewport"><div id="flatPlanImageWrap"><img id="flatPlanImg" src="plano_referencia.png" alt="Plano general de Los Prados"><div id="flatCurrentPin" aria-label="Ubicación actual">1</div></div></div></div>
+<button id="toggle">Ocultar/mostrar mapa</button><button id="aerialToggle" type="button">Ver plano</button><button id="broadcast" type="button">Compartir con asesor</button><div id="panel"><h2>LOS PRADOS DE HUNTER</h2><p>Tour panorámico 360° · EFCOM. Las imágenes publicadas se cargan automáticamente. También puedes seleccionar archivos locales para hacer pruebas.</p><label class="upload">Cargar panorámicas (JPG o PNG)<input id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p id="status">Buscando panorámicas publicadas. Las vistas aparecerán automáticamente al seleccionar cada punto.</p><div id="map"></div><div id="stations"></div><p id="aerialInfo">Marcador amarillo: ubicación actual del render. Ubicaciones aproximadas.</p><p id="shareStatus">Modo espectador desactivado.</p><p id="shareCode" style="display:none;color:#ffe3a1;font-size:13px;font-weight:bold;letter-spacing:.6px"></p><p><a id="spectatorLink" href="espectador.html" target="_blank" rel="noopener">Abrir pantalla del asesor</a></p><p id="help">PC: selecciona una flecha turquesa para elegir destino. Quest 3: activa «Enter VR», apunta a la flecha del destino y aprieta el gatillo. Usa el mapa para saltar a cualquier punto. El mapa es una propuesta preliminar: ajustaremos las ubicaciones con la revisión de cada panorama.</p></div><div id="loading">Cargando el recorrido panorámico…</div><div id="flatPlan" aria-label="Plano del proyecto"><div id="flatPlanControls"><button type="button" id="flatMinus">−</button><button type="button" id="flatPlus">+</button></div><button type="button" id="flatPlanClose">Volver al recorrido</button><div id="flatPlanViewport"><div id="flatPlanImageWrap"><img id="flatPlanImg" src="plano_referencia.png" alt="Plano general de Los Prados"><div id="flatCurrentPin" aria-label="Ubicación actual">1</div><div id="flatDestinationPin" aria-label="Destino elegido"></div></div></div><div id="flatDestinationNote">Toca un número para viajar directamente a ese punto.</div></div>
 <a-scene embedded vr-mode-ui="enabled:true" renderer="colorManagement:true;antialias:true" background="color:#162f2b" cursor="rayOrigin:mouse" raycaster="objects:.clickable" loading-screen="enabled:false"><a-entity id="rig" position="0 0 0"><a-camera look-controls="reverseMouseDrag:false"></a-camera><a-entity laser-controls="hand:right" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity><a-entity laser-controls="hand:left" raycaster="objects:.clickable;far:30" line="color:#fff"></a-entity></a-entity><a-sky id="sky" color="#24483b" rotation="0 -90 0"></a-sky><a-entity id="pathChoices" visible="false"></a-entity>
 <a-entity id="aerialEntry" position="-2.45 1.32 -2.60" rotation="0 43 0">
   <a-plane id="aerialEntryHit" class="clickable" width="0.80" height="0.22"
@@ -235,6 +235,9 @@ const overview=document.getElementById('aerialExperience');
 const board=document.getElementById('aerialBoard');
 const pin=document.getElementById('aerialPin');
 const selectedPin=document.getElementById('aerialSelectedPin');
+let pendingDestination=null;
+const flatDestinationPin=document.getElementById('flatDestinationPin');
+const flatDestinationNote=document.getElementById('flatDestinationNote');
 const currentNumber=document.getElementById('aerialCurrentNumber');
 const aerialLocationLabel=document.getElementById('aerialLocationLabel');
 const entry=document.getElementById('aerialEntry');
@@ -256,6 +259,40 @@ function placeCurrentNodeOnAerial(){
  if(previous)previous.geometry.dispose();
  aerialLocationLabel.setObject3D('mesh',new THREE.Mesh(new THREE.PlaneGeometry(2.1,0.36),getLabelMaterial(current)));
  document.getElementById('aerialInfo').textContent='Estás en '+node.name+' (amarillo). Ubicación aproximada. Toca el plano para marcar un lote (turquesa).';
+}
+// Detecta si se ha pulsado un número de panorámica, en coordenadas del plano.
+function nearestTourPoint(px,py){
+ if(!Number.isFinite(px)||!Number.isFinite(py))return null;
+ let best=null,minimum=Infinity;
+ nodes.forEach((n,i)=>{
+   const distance=Math.hypot((n.x-px)*planWidth/100,(n.y-py)*planHeight/100);
+   if(distance<minimum){minimum=distance;best=i;}
+ });
+ return minimum<=0.30?best:null;
+}
+function resetTourSelection(){
+ pendingDestination=null;
+ selectedPin.setAttribute('visible',false);
+ flatDestinationPin.style.display='none';
+ flatDestinationNote.textContent='Toca un número para viajar directamente a ese punto.';
+ document.getElementById('flatPlanClose').textContent='Volver al recorrido';
+ document.getElementById('aerialReturn').setAttribute('text','value:VOLVER AL TOUR;align:center;width:2.85;color:#ffffff');
+}
+function selectTourPoint(index){
+ if(!mapMode||!Number.isInteger(index)||index<0||index>=nodes.length)return;
+ pendingDestination=index;
+ const target=nodes[index],x=((target.x/100)-0.5)*planWidth,y=(0.5-target.y/100)*planHeight;
+ selectedPin.setAttribute('position',x.toFixed(4)+' '+y.toFixed(4)+' 0.075');
+ selectedPin.setAttribute('visible',true);
+ flatDestinationPin.style.left=target.x+'%';
+ flatDestinationPin.style.top=target.y+'%';
+ flatDestinationPin.style.display='flex';
+ flatDestinationPin.textContent=String(index+1);
+ document.getElementById('aerialReturn').setAttribute('text','value:IR AL PUNTO '+String(index+1).padStart(2,'0')+';align:center;width:2.85;color:#ffffff');
+ document.getElementById('flatPlanClose').textContent='Ir al punto '+String(index+1);
+ flatDestinationNote.textContent='Destino seleccionado: '+target.name+'. Pulsa para volver y viajar.';
+ document.getElementById('aerialInfo').textContent='Ubicación actual: '+nodes[current].name+'. Destino: '+target.name+'.';
+ setMessage('Destino elegido: '+target.name+'. Al salir del plano viajarás allí.');
 }
 function updateAerialEntryVisibility(){
  const visible=!mapMode;
@@ -304,6 +341,7 @@ document.getElementById('flatPlanClose').onclick=()=>exitAerial();
 function enterAerial(){
  if(mapMode)return;
  mapMode=true;
+ resetTourSelection();
  if(useFlatPlan()){updateFlatCurrentPin();flatPlan.classList.add('open');setFlatZoom(1);toggleAerial.textContent='Volver al recorrido';setMessage('Plano abierto desde '+nodes[current].name);return;}
  overview.setAttribute('visible',true);
  sky.setAttribute('visible',false);
@@ -319,16 +357,18 @@ function enterAerial(){
 }
 function exitAerial(restore=true){
  if(!mapMode)return;
+ const destination=restore?pendingDestination:null;
  mapMode=false;
  flatPlan.classList.remove('open');
  overview.setAttribute('visible',false);
  sky.setAttribute('visible',true);
  toggleAerial.textContent='Ver plano';
- selectedPin.setAttribute('visible',false);
+ resetTourSelection();
  updateAerialEntryVisibility();
  switchAerialHitState(false);
  document.getElementById('aerialInfo').textContent='Marcador amarillo: ubicación actual del render. Ubicaciones aproximadas.';
  if(restore){
+   if(destination!==null&&destination!==current){show(destination);return;}
    if(activeTexture){renderChoices(current);setMessage('Imagen visible: panorámica '+(current+1));}
    else show(current);
  }
@@ -345,11 +385,23 @@ document.getElementById('aerialSelect').addEventListener('click',event=>{
  if(!mapMode)return;
  const uv=event.detail&&event.detail.intersection&&event.detail.intersection.uv;
  if(!uv)return;
- const x=(uv.x-0.5)*planWidth;
- const y=(uv.y-0.5)*planHeight;
+ const target=nearestTourPoint(uv.x*100,(1-uv.y)*100);
+ if(target!==null){selectTourPoint(target);return;}
+ // Un clic fuera de los puntos sigue pudiendo señalar un lote en turquesa.
+ resetTourSelection();
+ const x=(uv.x-0.5)*planWidth,y=(uv.y-0.5)*planHeight;
  selectedPin.setAttribute('position',x.toFixed(4)+' '+y.toFixed(4)+' 0.075');
  selectedPin.setAttribute('visible',true);
- document.getElementById('aerialInfo').textContent='Estás en '+nodes[current].name+' (amarillo). Lote señalado (turquesa). Puntos aproximados.';
+ document.getElementById('aerialInfo').textContent='Estás en '+nodes[current].name+'. Lote señalado en turquesa; toca un número para viajar.';
+});
+document.getElementById('flatPlanImageWrap').addEventListener('click',event=>{
+ if(!mapMode||!useFlatPlan())return;
+ const box=flatImg.getBoundingClientRect();
+ const px=100*(event.clientX-box.left)/box.width,py=100*(event.clientY-box.top)/box.height;
+ if(px<0||px>100||py<0||py>100)return;
+ const target=nearestTourPoint(px,py);
+ if(target!==null)selectTourPoint(target);
+ else resetTourSelection();
 });
 toggleAerial.onclick=()=>mapMode?exitAerial():enterAerial();
 switchAerialHitState(false);
